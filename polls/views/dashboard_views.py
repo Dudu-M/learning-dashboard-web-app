@@ -34,42 +34,6 @@ def dashboard(request):
                 'current_plan':current_plan, 'current_week': current_week, 'reflections_due': reflections_due }
     return render(request, 'dashboard.html',context )
     
-    
-# overview helper functions 
-def importances_list():
-    importances = set(Resource.objects.values_list("importance", flat=True).distinct().order_by("importance")) #!!!!
-    importances.add("ALL")
-    return importances
-
-def calculate_overall_progress(user, filtered_resources):
-    completed_selected_week = user.completed_resources.all().filter(id__in=filtered_resources)
-    progress = 100
-    if filtered_resources: 
-        progress = int((len(completed_selected_week)/len(filtered_resources))*100)
-    return progress
-
-def overview_plan_form (user, week):
-    # if plan for week exists - send form to be edited
-    user_current_week_plans = user.plans.filter(week_plan=week)
-    if user_current_week_plans:
-        plan_form = PlanForm(instance=user_current_week_plans[0])
-        plan = user_current_week_plans[0]
-    else:
-        plan = None
-        plan_form = PlanForm()
-    return plan_form, plan
-
-def module_progress_dictionary(modules, ur, filtered_resources):
-    m_progress = {}
-    for m in modules:
-        resources = filtered_resources.filter(module = m.id)
-        r = ur.filter(module=m.id)
-        if resources:
-            m_progress[m]=int(len(r)/len(resources)*100)
-        else:
-            m_progress[m]= 100
-    return m_progress
-    
 @login_required
 def overview(request):
     # set up filter values 
@@ -166,8 +130,15 @@ def overview(request):
     if request.method == 'POST':
         form = PlanForm(request.POST)
         if form.is_valid():
-            saved_form = form.save()
-            user.add_plan(saved_form[0])
+            if plan :
+                # edit the existing plan
+                plan.week_plan = form.cleaned_data.get('week_plan')
+                plan.time_plan = form.cleaned_data.get('time_plan')
+                plan.study_method = form.cleaned_data.get('study_method')
+                plan.save()
+            else:
+                saved_form = form.save()
+                user.add_plan(saved_form[0])
             messages.add_message(request, messages.SUCCESS, "Plan saved!")
             return redirect(settings.REDIRECT_URL_WHEN_LOGGED_IN)
         else:
@@ -202,6 +173,41 @@ def module_page(request, module_code):
     return render(request, 'module_page.html', {'module': module, 'module_resources': module_resources, 
                                                 "resources_by_week": resources_by_week, "importances":importances }) 
     
+# overview helper functions 
+def importances_list():
+    importances = set(Resource.objects.values_list("importance", flat=True).distinct().order_by("importance")) #!!!!
+    importances.add("ALL")
+    return importances
+
+def calculate_overall_progress(user, filtered_resources):
+    completed_selected_week = user.completed_resources.all().filter(id__in=filtered_resources)
+    progress = 100
+    if filtered_resources: 
+        progress = int((len(completed_selected_week)/len(filtered_resources))*100)
+    return progress
+
+def overview_plan_form (user, week):
+    # if plan for week exists - send form to be edited
+    user_current_week_plans = user.plans.filter(week_plan=week)
+    if user_current_week_plans:
+        plan_form = PlanForm(instance=user_current_week_plans[0])
+        plan = user_current_week_plans[0]
+    else:
+        plan = None
+        plan_form = PlanForm()
+    return plan_form, plan
+
+def module_progress_dictionary(modules, ur, filtered_resources):
+    m_progress = {}
+    for m in modules:
+        resources = filtered_resources.filter(module = m.id)
+        r = ur.filter(module=m.id)
+        if resources:
+            m_progress[m]=int(len(r)/len(resources)*100)
+        else:
+            m_progress[m]= 100
+    return m_progress
+
 def minutes_to_hours_helper(minutes):
     minutes = int(minutes*60)
     t = divmod(minutes, 60)
@@ -211,3 +217,4 @@ def minutes_to_hours_helper(minutes):
         return str(t[0])+"hrs"
     else:
         return str(t[0])+"hrs " + str(t[1])+"mins"
+    

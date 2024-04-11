@@ -84,7 +84,7 @@ class PlanForm(forms.ModelForm):
         model = Plan
         fields = ['week_plan', 'time_plan', 'study_method']
         widgets = {
-            "study_method": Textarea(attrs={"cols": 80, "rows": 5}),
+            "study_method": Textarea(attrs={"cols": 80, "rows": 9}),
             "time_plan": Textarea(attrs={"cols": 80, "rows": 3}),
         }
         labels = {
