@@ -50,10 +50,15 @@ class PlanEditView(LoginRequiredMixin, UpdateView):
 
     model = Plan
     template_name = "edit_plan.html"
-    form_class = PlanForm
+    fields = ["week_plan", "time_plan", "study_method"]
+    
+    def get_form(self, *args, **kwargs):
+        form = super(PlanEditView, self).get_form(*args, **kwargs)
+        form.fields["time_plan"].widget.attrs["class"] = "form-group"
+        form.fields["study_method"].widget.attrs["class"] = "form-group"
+        return form
 
     def get_success_url(self):
         """Return redirect URL after successful update."""
         messages.add_message(self.request, messages.SUCCESS, "Plan updated!")
-        print(self.get_object())
         return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)

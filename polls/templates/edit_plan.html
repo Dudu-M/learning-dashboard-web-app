@@ -10,9 +10,9 @@
           Edit your plan
           </div>
           <div class = "card-body" style="overflow-y: auto; max-height:600px;">
-              <form action="" method="post" class="form">
+              <form method="post">
                   {% csrf_token %}
-                  {% include 'partials/bootstrap_form.html' with form=form %}
+                  {% include 'partials/bootstrap_form.html' with form=form%}
                   <div class="row" style="align-content: center; width: 100px; padding-left:10px"><input type="submit" value="Update" class="btn btn-primary btn-sm"></div>
               </form>
           </div>

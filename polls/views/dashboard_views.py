@@ -22,7 +22,7 @@ def dashboard(request):
     current_plan = request.user.plans.first()
     if current_plan and current_plan.has_reflection():
         current_plan=None
-    current_week = "Week_1" #use date to return the corresponding current date REMOVE
+    current_week = "Week_1" 
     for m in user_modules:
         user_resources += Resource.objects.filter(module=m)
     
@@ -66,7 +66,6 @@ def module_progress_dictionary(modules, ur, filtered_resources):
         r = ur.filter(module=m.id)
         if resources:
             m_progress[m]=int(len(r)/len(resources)*100)
-            print(len(r))
         else:
             m_progress[m]= 100
     return m_progress
@@ -169,7 +168,7 @@ def overview(request):
         if form.is_valid():
             saved_form = form.save()
             user.add_plan(saved_form[0])
-            messages.add_message(request, messages.SUCCESS, "Plan created!")
+            messages.add_message(request, messages.SUCCESS, "Plan saved!")
             return redirect(settings.REDIRECT_URL_WHEN_LOGGED_IN)
         else:
             messages.add_message(request, messages.ERROR, "Error: Form invalid!")
@@ -182,7 +181,6 @@ def module_page(request, module_code):
     module = Module.objects.get(module_code=module_code)
     module_resources = Resource.objects.filter(module=module)
     user = request.user
-    # resources_by_week = {}
     resources_by_week = []
     completed_resources = request.user.completed_resources
     weeks = list(module_resources.values_list("scheduled_week", flat=True).distinct().order_by("scheduled_week"))
@@ -191,17 +189,14 @@ def module_page(request, module_code):
         importances = list(w_resources.values_list("importance", flat=True).distinct().order_by("importance"))
         ur=completed_resources.filter(module=module).filter(scheduled_week=w).filter(importance="MANDATORY")        
         if w_resources.filter(importance="MANDATORY") :
-            progress = int(len(ur)/len(w_resources.filter(importance="MANDATORY") )*100) #.filter(importance = importance)
+            progress = int(len(ur)/len(w_resources.filter(importance="MANDATORY") )*100) 
         else:
             progress= 100
         resources_by_week.append((w,importances,w_resources, progress))
-
-    # importances = list(module_resources.values_list("importance", flat=True).distinct().order_by("importance"))
-    
+            
     if request.method == 'POST':
         complete_r_ids = request.POST.getlist('checklist', None)
         user_cr_before = user.completed_resources
-        # print(request.POST.getlist('checklist', None))
         if complete_r_ids:
             user.adjust_completed_resources(complete_r_ids, module)
     return render(request, 'module_page.html', {'module': module, 'module_resources': module_resources, 

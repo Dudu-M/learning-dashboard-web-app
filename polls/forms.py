@@ -99,7 +99,7 @@ class PlanForm(forms.ModelForm):
         """Create a new plan."""
 
         super().save(commit=False)
-        plan = Plan.objects.get_or_create(
+        plan = Plan.objects.create(
             week_plan = self.cleaned_data.get('week_plan'),
             time_plan = self.cleaned_data.get('time_plan'),
             study_method = self.cleaned_data.get('study_method'),
