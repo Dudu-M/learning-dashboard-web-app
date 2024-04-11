@@ -15,11 +15,6 @@ from django.db.models import Sum, Count
 import json
 from django.db.models import Q
 
-
-# Create your views here.
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
-
 @login_required 
 def dashboard(request):
     user_modules = request.user.modules.all()
@@ -38,22 +33,6 @@ def dashboard(request):
     context = {'user_modules': user_modules, 'user_resources': user_resources,
                 'current_plan':current_plan, 'current_week': current_week, 'reflections_due': reflections_due }
     return render(request, 'dashboard.html',context )
-
-class PlanningView(LoginRequiredMixin, FormView):
-    """View that allows user to plan."""
-
-    form_class = PlanForm
-    template_name = "planning.html"
-    redirect_when_logged_in_url = settings.REDIRECT_URL_WHEN_LOGGED_IN
-
-    def form_valid(self, form):
-        self.object = form.save()
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        self.request.user.add_plan(self.object[0])
-        messages.add_message(self.request, messages.SUCCESS, "Plan created!")
-        return reverse(settings.REDIRECT_URL_WHEN_LOGGED_IN)
     
 @login_required
 def overview(request):
