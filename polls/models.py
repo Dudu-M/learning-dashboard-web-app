@@ -119,6 +119,4 @@ class User(AbstractUser):
             return  reflections.latest('created_at')
         return None
     
-    # USERNAME_FIELD = 'email'
-    # REQUIRED_FIELDS = []
     

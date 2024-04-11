@@ -13,8 +13,9 @@ def reflection(request, plan_id):
         if form.is_valid():
             form.save(plan)
             messages.success(request, 'Reflection saved successfully')
-            return redirect('plans_list') #change to list of previous plans and reflections
+            return redirect('plans_list')
         else:
+            messages.error(request, 'There was an issue saving your reflection')
             return render(request, 'reflection.html', {"plan": plan, "form": form})
     else:
         return render(request, 'reflection.html', context)
