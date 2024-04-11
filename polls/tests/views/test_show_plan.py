@@ -13,6 +13,7 @@ class ShowPlanViewTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.get(username='JaneID123')
         self.plan = Plan.objects.get(id = 1)
+        self.user.add_plan(self.plan)
         self.url = reverse('show_plan', kwargs={'plan_id': self.plan.id})
         
     def test_show_plan_url(self):

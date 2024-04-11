@@ -12,6 +12,8 @@ class PlansListViewTestCase(TestCase):
 
     def setUp(self):
         self.user = User.objects.get(username='JaneID123')
+        self.plan = Plan.objects.get(id = 1)
+        self.user.add_plan(self.plan)
         self.url = reverse('plans_list')
         
     def test_plans_list_url(self):

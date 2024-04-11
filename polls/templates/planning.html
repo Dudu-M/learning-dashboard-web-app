@@ -9,11 +9,11 @@
           <div class="card-header">
           Create your plan...
           </div>
-          <div class = "card-body" style="overflow-y: auto; max-height:600px;">
+          <div class = "card-body" style="overflow-y: auto; max-height:450px;">
               <form action="{% url 'planning' %}" method="post">
                   {% csrf_token %}
                   {% include 'partials/bootstrap_form.html' with form=form %}
-                  <div class="row" style="align-content: center;"><input type="submit" value="Save" class="btn btn-primary btn-sm"></div>
+                  <div class="row" style="align-content: center; width: 100px; padding-left:10px"><input type="submit" value="Save" class="btn btn-primary btn-sm"></div>
               </form>
           </div>
       </div>

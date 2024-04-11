@@ -3,32 +3,15 @@
 <div class="container" style="padding-top: 5%;">
     <div calss="d-flex">
         <h3>All Plans
-        <a href="" data-bs-toggle='offcanvas'data-bs-target="#PlanFormCanvas" style="text-decoration: none;">
+        <a href="{% url 'planning' %}">
             <i class="fa-solid fa-sm fa-pen-to-square"></i>
         </a></h3>
-    </div>
-    <!-- Offcanvas -->
-    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="PlanFormCanvas" aria-labelledby="offcanvasScrollingLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Planner</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <form method="post">
-            <div class="offcanvas-body">
-                {% csrf_token %}
-                {% include 'partials/bootstrap_form.html' with form=form %}
-            </div>
-            <div>
-                <input type="submit" value="Save Plan" class="btn btn-primary">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Close</button>
-            </div>
-        </form>
     </div>
     <div class="row">
         <div class="col-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Your Latest Study Plan</h5>
+                    <a href="{% url 'show_plan' plans.first.id %}" style="text-decoration:none; color: black"> <h5>Your Latest Study Plan</h5></a>
                 </div>
                 <div class="card-body" style="auto-overflow-y: scroll; height:100%;">
                     {{plans.first.week_plan}}<hr>
