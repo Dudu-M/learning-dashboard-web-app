@@ -1,5 +1,6 @@
 from..forms import PlanForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
@@ -33,10 +34,15 @@ def plans_list(request):
 @login_required
 def show_plan(request, plan_id):
     plan = Plan.objects.get(id=plan_id)
+    
+    #prevent student to view plans that they dont own
+    if plan not in request.user.plans.all() :
+        messages.add_message(request, messages.ERROR, "Invalid Plan Access")
+        return HttpResponseRedirect(reverse('plans_list'))
+
     reflection = None
     if plan.has_reflection():
         reflection = plan.get_reflection()[0]
-    print(reflection)
     return render(request, 'show_plan.html', {"plan": plan, "reflection": reflection})
 
 class PlanEditView(LoginRequiredMixin, UpdateView):
