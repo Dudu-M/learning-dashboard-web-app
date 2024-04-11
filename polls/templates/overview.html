@@ -1,6 +1,6 @@
 {% extends 'base_content.html' %}
 {% block content %}
-<div class="container" style="padding-top: 4%;">
+<div class="container" style="padding-top: 4%; width: 200%">
     <div class="d-flex justify-content-between">
         <div class="d-flex">
         <h3 style="padding-right:40px">Workload Overview</h3> 
@@ -50,7 +50,7 @@
                         </div>
                         <p class="blockquote-footer" style="font-size: 10pt; position: end">{{request.user.last_reflection.created_at}}</p>
                     </div>
-                    </div>
+                </div>
                 </div>
                 {% if plan %}
                     <form action="{% url 'plan_edit' plan.id %}" method="post">

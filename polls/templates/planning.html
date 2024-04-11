@@ -4,12 +4,26 @@
   <div class="container">
     <div class="row h-50">
       <div class="col-12" style="padding-top: 5%;">
-        <h1>Plan</h1>
+        <h1>Plan</h1> 
         <div class="card" style="max-width: 100%; padding-top: %; text-align:left;">
           <div class="card-header">
           Create your plan...
           </div>
           <div class = "card-body" style="overflow-y: auto; max-height:450px;">
+            <div class="accordion" id="accordionExample" style="padding-bottom: 5px;">
+              <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      <i class="fa-solid fa-star" style="color: orange; padding-right:3px;"></i> Last Takeaway
+                  </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                      {{request.user.last_reflection.carry_forward_reflection}}      
+                  </div>
+                  <p class="blockquote-footer" style="font-size: 10pt; position: end">{{request.user.last_reflection.created_at}}</p>
+              </div>
+          </div>
               <form action="{% url 'planning' %}" method="post">
                   {% csrf_token %}
                   {% include 'partials/bootstrap_form.html' with form=form %}
