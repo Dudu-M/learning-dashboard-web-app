@@ -1,0 +1,24 @@
+{% extends 'base_content.html' %}
+{% block content %}
+<div>
+  <div class="container" style="overflow-y: scroll;">
+    <div class="row h-50">
+      <div class="col-12" style="padding-top: 10%;">
+        <div class="card cover-card" style="max-width: 35rem; padding-top: 5%;">
+          <h1 class="cover-heading">Sign Up</h1>
+          <div>
+            <form action="{% url 'sign_up' %}" method="post">
+              {% csrf_token %}
+              {% include 'partials/bootstrap_form.html' with form=form %}
+              <div class="row" style="align-content: center;"><input type="submit" value="Sign up" class="btn btn-primary btn-lg"></div>
+            </form>
+          </div>
+          <p style="padding-top: 5%;">Already have an account?<a href="{% url 'log_in' %}" style="color: blue;">
+            Log in!
+          </a>
+        </p>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

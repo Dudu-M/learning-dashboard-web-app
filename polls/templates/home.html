@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block body %}
+<div>
+    <div>
+    <div>
+    <div class="container" style="padding-top: 20%;">
+        <div class="col-6" style="margin-center: 8pt; text-align: center;">
+            <p>Study Budy<br>
+                Guidance for managing you cademics
+            </p>
+        <div class="row justify-content-center" style="padding-top: 8%;">
+            <div class="col-4">
+            <a href="{% url 'sign_up' %}" class="btn btn-lg btn-danger btn-block">
+                Sign up
+            </a> 
+            </div>
+        <div class="col-4">
+            <a href="{% url 'log_in' %}" class="btn btn-lg btn-secondary btn-block">
+                Log in
+            </a>
+        </div>
+        </div>
+        </div>
+    </div>
+    </div>
+        </p>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

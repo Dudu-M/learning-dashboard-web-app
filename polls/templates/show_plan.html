@@ -1,0 +1,58 @@
+{% extends 'base_content.html' %}
+{% block content %}
+<div class="container" style="padding-top: 5%;">
+    <h3>{{plan.week_plan}} Plan</h3> 
+    {%if reflection%}
+        <div class="card border-success mb-3">
+            <div class="card-header">
+                <i class="fa-solid fa-star"></i> Lesson Learnt/Key Takeaway
+            </div>
+            <div class="card-body text-success">
+            <blockquote class="blockquote mb-1">
+                <p>{{reflection.carry_forward_reflection}}</p>
+                <footer class="blockquote-footer">reflection date{{reflection.created_at}}</footer>
+            </blockquote>
+            </div>
+        </div>
+        <br>
+    {%endif%}
+    <div class="row">
+        <div class="col-6">
+            <h3>You planned...</h3> 
+            <div class="card">
+                <div class="card-body">
+                    Time plan<div class="card" style ="padding:5px;"> {{plan.time_plan}}</div>
+                    <br>
+                    How you intended to study<div class="card"  style ="padding:5px;"> {{plan.study_method}}</div>
+                </div>
+            </div>
+        </div>
+    <div class ="col-6">
+        <div>
+            <h3>How it went...<h3>
+        </div>
+        {%if reflection%}
+        <div class="card" style="max-width: 100%; padding-top: %; text-align:left;">
+            <div class = "card-body" style="overflow-y: auto; max-height:600px;">
+                Time actually spent<div class="card" style ="padding:5px;"> {{reflection.time_reflection}}</div>
+                <br>
+                Study method actually followed<div class="card"  style ="padding:5px;"> {{reflection.study_method_reflection}}</div>
+            </div>
+        </div>
+        {%else%}
+        <div class="card border-grey mb-3">
+            <div class="card-body" style="text-align: center; background-color: #eeeeee">
+                You have not reflected on this plan<br>
+                <a class="btn btn-dark btn-sm" href="{% url 'reflection' plan.id %}" role="button" style ="font-size: 15pt;"> Add Reflection</a>
+                {%if plan.reflection_overdue %}
+                    <br> <span style = "font-size: 10pt; color: red;">due {{plan.get_reflection_date | timesince}} ago</span>
+                {%else%}
+                    <br> due in {{plan.get_reflection_date | timeuntil}} 
+                {%endif%}
+            </div>
+        </div>
+        {%endif%}
+    </div>
+</div>
+</div>
+{% endblock %}

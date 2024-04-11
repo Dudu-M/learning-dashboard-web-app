@@ -1,0 +1,24 @@
+{% extends 'base_content.html' %}
+{% block content %}
+<div>
+  <div class="container">
+    <div class="row h-50">
+      <div class="col-12" style="padding-top: 5%;">
+        <h1>Plan</h1>
+        <div class="card" style="max-width: 100%; padding-top: %; text-align:left;">
+          <div class="card-header">
+          Edit your plan
+          </div>
+          <div class = "card-body" style="overflow-y: auto; max-height:600px;">
+              <form action="{% plan.id % object.id}" method="post" class="form">
+                  {% csrf_token %}
+                  {% include 'partials/bootstrap_form.html' with form=form %}
+                  <div class="row" style="align-content: center;"><input type="submit" value="Update" class="btn btn-primary btn-sm"></div>
+              </form>
+          </div>
+      </div>
+      <br>
+    </div>
+  </div>
+</div>
+{% endblock %}

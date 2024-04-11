@@ -1,0 +1,82 @@
+{% extends 'base_content.html' %}
+{% block content %}
+<div class="container" style="padding-top: 5%;">
+    <div calss="d-flex">
+        <h3>All Plans
+        <a href="" data-bs-toggle='offcanvas'data-bs-target="#PlanFormCanvas" style="text-decoration: none;">
+            <i class="fa-solid fa-sm fa-pen-to-square"></i>
+        </a></h3>
+    </div>
+    <!-- Offcanvas -->
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="PlanFormCanvas" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Planner</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <form method="post">
+            <div class="offcanvas-body">
+                {% csrf_token %}
+                {% include 'partials/bootstrap_form.html' with form=form %}
+            </div>
+            <div>
+                <input type="submit" value="Save Plan" class="btn btn-primary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Close</button>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Your Latest Study Plan</h5>
+                </div>
+                <div class="card-body" style="auto-overflow-y: scroll; height:100%;">
+                    {{plans.first.week_plan}}<hr>
+                    {{plans.first.time_plan}}<br><br>
+                    {{plans.first.study_method}}
+                </div>
+            </div>
+            <br>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Due for reflection <span class="badge translate-middle badge rounded-pill bg-danger">{{overdue}}</span></h5>
+                </div>
+                <ul class="list-group list-group-flush" style="auto-overflow-y: scroll; height:50%;">
+                    {% for  p in plans %}
+                        <a href="{% url 'show_plan' p.id %}" style="text-decoration:none"> 
+                            {% if p.reflection_overdue %}
+                            <li class="list-group-item">
+                                {{p.week_plan}} {{ p.study_method |truncatechars:30 }}
+                                <small class="text-muted" style="float:right;"> <i class="fa-solid fa-r fa-sm" style="padding-right:3px; color:red;"> <i class="fa-solid fa-spinner"></i></i>was due {{p.get_reflection_date | timesince}} ago </small>
+                                {%endif%}
+                            </li>
+                        </a>
+                    {% endfor %}
+                </ul>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    Your past plans
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for  p in plans %}
+                        <a href="{% url 'show_plan' p.id %}" style="text-decoration:none"> 
+                            {% if p.has_reflection %}
+                            <li class="list-group-item">
+                                {{p.week_plan}} {{p.study_method |truncatechars:60 }} 
+                                <small class="text-muted" style="float:right;"><i class="fa-solid fa-r fa-sm" style="padding-right:3px; color:darkgreen; float:right;"> <i class="fa-solid fa-check"></i></i></small>
+                            </li>
+                            {%endif%}
+                        </a>
+                    {% endfor %}
+                </ul>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

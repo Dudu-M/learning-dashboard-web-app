@@ -1,0 +1,244 @@
+{% extends 'base_content.html' %}
+{% block content %}
+<div class="container" style="padding-top: 4%;">
+    <div class="row">
+        <div class ="col-sm">
+            <h3>Workload Overview</h3> 
+        </div>
+        <div class ="col-sm offset-md-6" style="items-align:right;">
+            <a class="btn btn-primary" href="" data-bs-toggle='offcanvas'data-bs-target="#PlanFormCanvas" style="text-decoration: none;">
+                <i class="fa-solid fa-2x fa-pen-to-square"></i>Plan
+            </a>
+        </div>
+        <!-- Offcanvas -->
+        <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="PlanFormCanvas" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Planner</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <form method="post">
+                <div class="offcanvas-body">
+                    {% csrf_token %}
+                    {% include 'partials/bootstrap_form.html' with form=plan_form %}
+                </div>
+                <div>
+                    <input type="submit" value="Save Plan" class="btn btn-primary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form name="week" id ="week" action="{% url 'overview' %}" method="get">
+        
+        <div class="d-flex">
+            <select class="form-select form-inline" aria-label="Default select example" id='weeks' name ="selected_week" type="submit" style="width: 30%;">
+                <option selected value= "WEEK 1">Week 1</option>
+                <option value="WEEK 2">Week 2</option>
+                <option value="WEEK 3">Week 3</option>
+                <option value="WEEK 4">Week 4</option>
+            </select><input type="submit" value="Select">
+        </div>
+    </form>
+    <hr>
+    <div class='row' style= 'padding-left:30px'>
+        <div class="col-sm">
+            <div class="card text-white bg-black mb-3 shadow" style="max-width: 15rem; height: 6rem;">
+                <div class="card-body" style="text-align:center;">
+                <h5 class="card-title">Heaviest module</h5>
+                <p class="card-text">[Module]</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card text-white bg-black mb-3 shadow" style="max-width: 15rem; height: 6rem;">
+                <div class="card-body" style="text-align:center;">
+                <h5 class="card-title">Estimate Time</h5>
+                <p class="card-text">[Module]</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card text-white bg-black mb-3 shadow" style="max-width: 15rem; height: 6rem;">
+                <div class="card-body" style="text-align:center;">
+                <h5 class="card-title">Estimate Time</h5>
+                <p class="card-text">[Module]</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card text-white bg-black mb-3 shadow" style="max-width: 15rem; height: 6rem;">
+                <div class="card-body" style="text-align:center;">
+                <h5 class="card-title">Estimate Time</h5>
+                <p class="card-text">[Module]</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card text-white bg-black mb-3 shadow" style="max-width: 15rem; height: 6rem;">
+                <div class="card-body" style="text-align:center;">
+                <h5 class="card-title">Estimate Time</h5>
+                <p class="card-text">[Module]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-4"style="position: relative;">
+            <h4 style="text-align: center;">Work split by Module</h4>
+            <canvas id="myChart" width="1" height="2"></canvas>
+        </div>
+        <div class="col-sm-8" style="position: relative; height:60vh; width:60vw">
+            <h4 style="text-align: center;">Content type per Module</h4>
+            <canvas id="myBarChart"></canvas>
+        </div>
+    </div>
+    <br>
+</div>
+
+<script>
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+        labels: {{labels|safe}},
+        datasets: [{
+            label: 'Time for module',
+            data: {{data|safe}},
+            borderWidth: 2
+        }]
+        },
+        options: {
+        responsive: true,
+        animation: {
+            animateRotate: true
+        },
+        scales: {
+            y: {
+            beginAtZero: true
+            }
+        }
+        }
+    });
+
+    let data = [ for d in ]
+    const ctx2 = document.getElementById('myBarChart');
+    new Chart(ctx2, {
+        data: {
+            datasets: [{
+                type: 'bar',
+                label: '{{r_labels.0}}',
+                data: {{r_data.0|safe}},
+                borderWidth: 1
+            },{
+                type: 'bar',
+                label: '{{r_labels.1}}',
+                data: {{r_data.1|safe}},
+                borderWidth: 1
+            },{
+                type: 'bar',
+                label: '{{r_labels.2}}',
+                data: {{r_data.2|safe}},
+                borderWidth: 1
+            }, {
+                type: 'bar',
+                label: '{{r_labels.3}}',
+                data: {{r_data.3|safe}},
+                borderWidth: 1
+            }],
+            labels: {{labels|safe}},
+        },
+        options: {
+            responsive: true,
+            indexAxis: 'y',
+            animation: {
+                animateRotate: true
+            },
+            scales: {
+                y: {
+                beginAtZero: true
+                }
+            }
+        }
+    });
+
+    /* 
+    console.log(data);
+    /*var data = [ for (let i = 0; i <= "{{r_labels}}".length; i++)
+    {
+        {
+            type: 'bar',
+            label: '{{r_labels.1}}'
+            data: {{r_data.i|safe}},
+            borderWidth : 1
+        },
+    }];
+
+    console.log(size);
+
+    console.log(d[0]);
+    console.log(l);
+    */
+</script>
+{% endblock %}
+
+<!-- Modal -->
+{% comment %} <div class="modal left fade" id="PlanFormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">My Planner</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="post">
+            <div class="modal-body">
+                {% csrf_token %}
+                {% include 'partials/bootstrap_form.html' with form=plan_form %}
+            </div>
+            <div class="modal-footer">
+                <input type="submit" value="Save Plan" class="btn btn-primary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </form>
+    </div>
+    </div>
+</div> 
+<h4>Your modules</h4>
+    {% for m in request.user.modules.all %}
+    <div class="card">
+        <div class="card-body">
+            {{ m }}
+            {{resources.all}}
+        </div>
+    </div>
+    {% endfor %}
+
+    <h4>Your Plans</h4>
+    {% for p in request.user.plans.all %}
+    <div class="card">
+        <div class="card-body">
+            {{ p.study_method }} {{p.week_plan}}
+        </div>
+    </div>
+    {% endfor %}{% endcomment %}
+
+    <div class="card">
+        <div class="card-header">
+            Your past plans
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for  p in plans %}
+                <a href="{% url 'show_plan' p.id %}"> 
+                    <li class="list-group-item">
+                        {% if p.has_reflection %}
+                            <i class="fa-solid fa-r fa-sm" style="padding-right:3px; color:darkgreen;"> <i class="fa-solid fa-check"></i></i>
+                        {%else%}
+                            <a href="{% url 'reflection' p.id %}"><i class="fa-solid fa-r fa-sm" style="padding-right:3px; color:red;"> <i class="fa-solid fa-spinner"></i></i></a>
+                        {%endif%}
+                        {{p.week_plan}} {{p.study_method}} 
+                        <small class="text-muted" style="float:right;"> due in {{p.get_reflection_date | timeuntil}} </small>
+                    </li>
+                </a>
+            {% endfor %}
+        </ul>
+    </div>

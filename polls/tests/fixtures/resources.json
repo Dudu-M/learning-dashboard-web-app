@@ -1,0 +1,39 @@
+[
+  {
+    "model": "polls.resource",
+    "pk": 1,
+    "fields": {
+      "module": 1,
+      "resource_name": "COM Video",
+      "resource_type": "VIDEO",
+      "recommended_time_in_minutes": 50,
+      "importance": "MANDATORY",
+      "scheduled_week": "WEEK 1"
+    }
+  },
+  {
+    "model": "polls.resource",
+    "pk": 2,
+    "fields": {
+      "module": 1,
+      "resource_name": "COM Video 2",
+      "resource_type": "VIDEO",
+      "recommended_time_in_minutes": 50,
+      "importance": "MANDATORY",
+      "scheduled_week": "WEEK 1"
+    }
+  },
+  {
+    "model": "polls.resource",
+    "pk": 3,
+    "fields": {
+      "module": 1,
+      "resource_name": "COM Slides",
+      "resource_type": "DOCUMENT",
+      "recommended_time_in_minutes": 50,
+      "importance": "RECOMMENDED",
+      "scheduled_week": "WEEK 1"
+    }
+  }
+  
+]
