@@ -197,23 +197,7 @@ def module_page(request, module_code):
     # user_completed_resources = [r for r in module_resources if r in request.user.completed_resources] 
     
     return render(request, 'module_page.html', {'module': module, 'module_resources': module_resources, 
-                                                "resources_by_week": resources_by_week, "importances":importances })
-# change to create reflection
-@login_required
-def reflection(request, plan_id):
-    plan = Plan.objects.get(id=plan_id)
-    context = {"plan": plan, "form": ReflectionForm()}
-    if request.method == 'POST':
-        form = ReflectionForm(request.POST)
-        if form.is_valid():
-            form.save(plan)
-            messages.success(request, 'Reflection saved successfully')
-            return redirect('plans_list') #change to list of previous plans and reflections
-        else:
-            return render(request, 'reflection.html', {"plan": plan, "form": form})
-    else:
-        return render(request, 'reflection.html', context)
-    
+                                                "resources_by_week": resources_by_week, "importances":importances }) 
     
 def minutes_to_hours_helper(minutes):
     minutes = int(minutes*60)
@@ -224,9 +208,3 @@ def minutes_to_hours_helper(minutes):
         return str(t[0])+"hrs"
     else:
         return str(t[0])+"hrs " + str(t[1])+"mins"
-    
-@login_required
-def reflection_list(request):
-    plans = request.user.plans.all().order_by('-id')
-    reflections = [p.get_reflection()[0] for p in plans if p.has_reflection()]
-    return render(request, 'reflections_list.html', {"reflections": reflections})
