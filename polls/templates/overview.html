@@ -1,0 +1,267 @@
+{% extends 'base_content.html' %}
+{% block content %}
+<div class="container" style="padding-top: 4%;">
+    <div class="d-flex justify-content-between">
+        <div class="d-flex">
+        <h3 style="padding-right:40px">Workload Overview</h3> 
+            <form name="week" id ="week" action="{% url 'overview' %}" method="get">
+                <div class="d-flex">
+                    <select class="form-select form-inline" aria-label="Default select example" id='weeks' name ="selected_week" type="submit" style="width: 150px;">
+                        <option value="" disabled >Choose week...</option>
+                        {% for w in weeks %}
+                                <option  value="{{w}}" {% if w == selected_week %} selected {% endif %}>{{w}}</option>
+                        {% endfor %}
+                    </select>
+                    <select class="form-select form-inline" aria-label="Default select example" id='importance' name ="importance" type="submit" style="width: 200px;">
+                        <option value="" disabled >Importance Level...</option>
+                        {% for i in importances %}
+                                <option value="{{i}}" {% if i == selected_importance %} selected {% endif %}>{{i}} </option>
+                        {% endfor %}
+                    </select>
+                    <select class="form-select form-inline" aria-label="Default select example" id='complete' name ="complete" type="submit" style="width: 200px;">
+                        <option value="" disabled >Type of work...</option>
+                        <option value="incomplete" {% if completion_status == 'incomplete' %} selected {% endif %}>Incomplete work</option>
+                        <option value="all" {% if completion_status == 'all' %} selected {% endif %}>All work</option>
+                    </select>
+                    <input type="submit" value="Select">
+                </div>
+            </form>
+        </div>
+        <a class="btn btn-dark btn-md" href="" data-bs-toggle='offcanvas'data-bs-target="#PlanFormCanvas" style="text-decoration: none;">
+            Create Plan <i class="fa-solid fa-sm fa-pen-to-square"></i>
+        </a>
+        <!-- Plan Form Offcanvas -->
+        <div class="offcanvas offcanvas-end show" data-bs-scroll="false" data-bs-backdrop="false" tabindex="-1" id="PlanFormCanvas" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Planner</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" style="overflow-y:auto; flex-wrap: nowrap;">
+                <div class="accordion" id="accordionExample" style="padding-bottom: 5px;">
+                    <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <i class="fa-solid fa-star" style="color: orange; padding-right:3px;"></i> Last Takeaway
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            {{request.user.last_reflection.carry_forward_reflection}}      
+                        </div>
+                        <p class="blockquote-footer" style="font-size: 10pt; position: end">{{request.user.last_reflection.created_at}}</p>
+                    </div>
+                    </div>
+                </div>
+                {% if plan %}
+                    <form action="{% url 'plan_edit' plan.id %}" method="post">
+                            {% csrf_token %}
+                            {% include 'partials/bootstrap_form.html' with form=plan_form %}
+                            <input type="submit" value="Save" class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Close</button>
+                    </form>
+                {% else %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {% include 'partials/bootstrap_form.html' with form=plan_form %}
+                        <input type="submit" value="Save" class="btn btn-primary">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Close</button>
+                    </form>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+<hr>
+<div class="row">
+    <div class="col-sm-2"style="position: relative; width:20vw;">
+        <div class="card shadow" style="padding:10px;">
+            <h6 style="text-align: center;">Estimated Work Time (hrs) </h6>
+            <h4 style="text-align:center; color: orange; background-color:black">{{time_total}} hrs</h4>
+            <canvas id="myChart" width="200" height="100" alt="Pie Chart showing the split of work by modules"></canvas>
+            <hr>
+            <div class=" d-flex justify-content-around" style="font-size: 16px; padding:0px"> 
+                <div>n hrs <i class="fa-solid fa-circle-check"></i></div>    
+                <div>n hrs <i class="fa-solid fa-spinner fa-spin-pulse"></i></div>
+            </div>
+        </div>
+    </div> 
+    <div class="col-sm-8" style="position: relative; width:55vw;">
+        <div class="d-flex justify-content-around">
+            {% for d in summary_data.items%}
+            <div class="card text-grey border-warning mb-3 shadow" style="max-width: 20rem; height: 6rem;">
+                <div class="card-body" style="text-align:center; text-size: 5px">
+                    <h6>{{d.0}}</h6>
+                    <small><b>{{d.1}}</b></small>
+                </div>
+            </div>
+            {%endfor%}  
+        </div>
+        <div class="card shadow" style="padding:10px; max-height:60vh">
+            <h6 style="text-align: center;">Workload Distribution by Resource Type
+            <div style="font-size: 12px; text-align: center; color: grey;">*click type to remove from view*</div></h6>
+            <canvas id="myBarChart" width="700" height="300" alt="Stacked bar chart showing split of resources for each module by their type"></canvas>
+            <div style="font-size: 12px; text-align: center; color: grey;">hours</div></h6>
+        </div>
+        
+    </div>
+    <div class="col-sm-2"style="position: relative;">
+        <div style="position: relative; width:15vw; padding-bottom:5px;">
+            <div class="card shadow" style="padding:10px; max-height:80vh;">
+                <h6 style="text-align: center;">Progress</h6>
+                <div style="padding:5px; width:14vw; height:30vh;">
+                    {% comment %} <h6 style="text-align: center;">Progress Overview</h6> {% endcomment %}
+                    <canvas id="myProgressChart" width="200" height="50" alt="doughnut chart showing progress through work according"></canvas>
+                </div>
+                {% comment %} <h6 style= "padding-left:8px">per module</h6> {% endcomment %}
+                <div style="font-size: 12px; text-align: left; color: grey;">per module</div></h6>
+                {%for m in m_progress.items%}
+                <div style="padding:5px">
+                    <a href="{% url 'module_page' m.0.module_code %}"><small style="float:left; padding-right:5px; padding-top:2px"> {{m.0}}</small></a>
+                    <div class="progress" style="background: #A9A9A9; height: 10px; width:130px; float:left">
+                        <div class="progress-bar" role="progressbar" style="width: {{m.1}}%; background: #2ECC40" aria-valuenow="{{m.1}}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small style="float:right; padding-left:10px"> {{m.1}}%</small>
+                </div>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+        labels: {{labels|safe}},
+        datasets: [{
+            label: 'Time for module',
+            data: {{data|safe}},
+            borderWidth: 2,
+            datalabels: {
+                color: 'black',
+                font: {
+                    weight: 'bold'
+                }
+            },
+        }]
+        },
+        options: {
+        responsive: true,
+        animation: {
+            animateRotate: true
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'bottom',
+                align: 'start',
+            },
+            
+        }, 
+        aspectRatio:0.65,
+        },
+        plugins: [ChartDataLabels]
+    });
+
+    const centerTextLine = {
+        id: 'centerTextLine',
+        beforeDatasetsDraw(chart, args, plugin) {
+            const { ctx } = chart;
+
+            const xCenter = chart.getDatasetMeta(0).data[0].x;
+            const yCenter = chart.getDatasetMeta(0).data[0].y;
+
+            ctx.save();
+            ctx.font = 'bold 30px sans-serif';
+            ctx.fillStyle = 'black'
+            ctx.textAlign = 'center'
+            ctx.textBaseLine ='middle'
+            ctx.fillText(`${chart.data.datasets[0].data[0]}%`, xCenter, yCenter)
+        }
+    }
+    const ctx3 = document.getElementById('myProgressChart');
+    new Chart(ctx3, {
+        type: 'doughnut',
+        data: {
+        labels: ['done', 'incomplete'],
+        datasets: [{
+            label: 'Time for module',
+            data: [{{progress}}, 100-{{progress}}],
+            borderWidth: 2,
+            datalabels: {
+                color: 'white',
+                font: {
+                    weight: 'bold'
+                }
+            },
+            backgroundColor: ['#2ECC40','#A9A9A9'],
+            circumference : 270,
+            rotation : 225,
+            cutout: '50%'
+        }]
+        },
+        options: {
+            responsive: true,
+            animation: {
+                animateRotate: true
+            },
+            title: {
+                display: true,
+                fontSize: 30,
+                family: 'Arial Helvetica sans-serif',
+                text: 'Progress'
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+            }
+    
+        },
+        plugins: [ChartDataLabels, centerTextLine]
+    });
+
+
+    var d = JSON.parse('{{ r_data|escapejs }}')
+    var l = JSON.parse('{{ r_labels|escapejs }}')
+    var data=[];
+    var size = JSON.parse('{{ r_data|escapejs }}').length;
+
+    for (let i = 0; i < size; i++)
+    {
+        data.push({label: l[i], data: d[i], borderWidth : 1},)
+    }
+    
+    data.push({type: 'line', label: "ALL", data: {{data|safe}}, borderWidth : 1},)
+
+    const ctx2 = document.getElementById('myBarChart');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            datasets: data,
+            labels: {{labels|safe}},
+        },
+        options: {
+            responsive: true,
+            indexAxis: 'y',
+            animation: {
+                animateRotate: true
+            },
+            scales: {
+                x: {
+                    stacked : true
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                }
+            },
+            plugins: {
+                legend: {
+                    position :'right'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

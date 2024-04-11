@@ -1,0 +1,32 @@
+[
+  {
+    "model": "polls.plan",
+    "pk": 1,
+    "fields": {
+      "week_plan": "WEEK 1",
+      "time_plan": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "study_method": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "created_at": "2024-03-16T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "polls.plan",
+    "pk": 2,
+    "fields": {
+      "week_plan": "WEEK 2",
+      "time_plan": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "study_method": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "created_at": "2024-03-16T17:41:28+00:00"
+    }
+  },
+  {
+    "model": "polls.plan",
+    "pk": 3,
+    "fields": {
+      "week_plan": "WEEK 3",
+      "time_plan": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "study_method": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "created_at": "2024-03-16T17:41:28+00:00"
+    }
+  }
+]

@@ -1,0 +1,80 @@
+{% extends 'base_content.html' %}
+{% block content %}
+<div class="container" style="padding-top: 5%;">
+    <h3>Hi {{ user.first_name }} </h3>
+    <div class="row">
+        <div class="col-sm-3">
+            <a href="{% url 'overview' %}" style="text-decoration: none;">
+            <div class="card text-white bg-blue mb-3">
+                <div class="card-body" style="text-align:left; ">
+                <h5 class="card-title">Workload Overview</h5>
+                <p class="card-text"></p>
+                </div>
+            </div>
+            </a>
+        </div>
+        <div class="col-sm-3">
+            <a href="{% url 'plans_list' %}" style="text-decoration: none;">
+            <div class="card text-white bg-blue mb-3">
+                <div class="card-body" style="text-align:left; ">
+                <h5 class="card-title">Plans</h5>
+                <p class="card-text"></p>
+                </div>
+                {%if reflections_due %}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{reflections_due}}
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                {%endif%}
+            </div>
+            </a>
+        </div>
+        <div class="col-sm-3">
+            <a href="{% url 'reflection_list' %}" style="text-decoration: none;">
+            <div class="card text-white bg-blue mb-3">
+                <div class="card-body" style="text-align:left; ">
+                <h5 class="card-title">Reflections</h5>
+                <p class="card-text"></p>
+                </div>
+            </div>
+            </a>
+        </div>
+    </div>
+    <div class="card">
+        {%if current_plan %}
+        <div class="card-header">
+            <h5>
+                Your {{current_plan.week_plan}} Study Plan  
+                <a class="btn btn-dark btn-sm" href="{% url 'plan_edit' current_plan.id %}" role="button">Edit</a>
+                {%if current_plan.reflection_overdue%}
+                    <a class="btn btn-danger btn-sm" href="{% url 'reflection' current_plan.id %}" role="button">Reflect</a>
+                {%else%}
+                    <a class="btn btn-dark btn-sm" href="{% url 'reflection' current_plan.id %}" role="button">Reflect</a>
+                {%endif%}
+            </h5> 
+        </div>
+        <div class="card-body" style="overflow-y: auto; height:110px;">
+            {{current_plan.time_plan}}<br><br>
+            {{current_plan.study_method}}
+        </div>
+        {%else%}
+        <div class="card-body" style="overflow-y: auto;">
+            You have no Active Study Plan  
+            <a class="btn btn-dark btn-sm" href="{% url 'overview' %}" role="button" style='text-muted'>Create Plan <i class="fa-solid fa-sm fa-pen-to-square"></i></a>
+        </div>
+        {%endif%}
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-header">
+            <h4>Modules</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for  m in user_modules %} 
+                <a href="{% url 'module_page' m.module_code %}" style="text-decoration: none;">
+                    <li class="list-group-item"> {{ m }} </li>
+                </a>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
