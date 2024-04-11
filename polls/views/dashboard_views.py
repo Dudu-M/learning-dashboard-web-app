@@ -34,63 +34,93 @@ def dashboard(request):
                 'current_plan':current_plan, 'current_week': current_week, 'reflections_due': reflections_due }
     return render(request, 'dashboard.html',context )
     
+    
+# overview helper functions 
+def importances_list():
+    importances = set(Resource.objects.values_list("importance", flat=True).distinct().order_by("importance")) #!!!!
+    importances.add("ALL")
+    return importances
+
+def calculate_overall_progress(user, filtered_resources):
+    completed_selected_week = user.completed_resources.all().filter(id__in=filtered_resources)
+    progress = 100
+    if filtered_resources: 
+        progress = int((len(completed_selected_week)/len(filtered_resources))*100)
+    return progress
+
+def overview_plan_form (user, week):
+    # if plan for week exists - send form to be edited
+    user_current_week_plans = user.plans.filter(week_plan=week)
+    if user_current_week_plans:
+        plan_form = PlanForm(instance=user_current_week_plans[0])
+        plan = user_current_week_plans[0]
+    else:
+        plan = None
+        plan_form = PlanForm()
+    return plan_form, plan
+
+def module_progress_dictionary(modules, ur, filtered_resources):
+    m_progress = {}
+    for m in modules:
+        resources = filtered_resources.filter(module = m.id)
+        r = ur.filter(module=m.id)
+        if resources:
+            m_progress[m]=int(len(r)/len(resources)*100)
+            print(len(r))
+        else:
+            m_progress[m]= 100
+    return m_progress
+    
 @login_required
 def overview(request):
+    # set up filter values 
     if request.user.plans.exists() : 
         current_week = request.user.plans.first().week_plan
     else:
         current_week ="WEEK 1"
+        
+    # default values 
     week = current_week
     importance = "MANDATORY"
     completion_status = "all"
+    
     if request.method == 'GET' and request.GET.get('selected_week', None):
         week = request.GET.get('selected_week', None)
         importance = request.GET.get('importance', None)
         completion_status = request.GET.get('complete', None)
-    user=request.user
+        
+    user = request.user
     modules = user.modules.all()
-    labels = []
-    data = []
-    filtered_resources = []
-    # week ->input value
-    mandatory = []
-    importances = set(Resource.objects.values_list("importance", flat=True).distinct().order_by("importance")) #!!!!
-    importances.add("ALL")
+    ur=user.completed_resources.filter(scheduled_week=week)
     
-    m_progress={}
+    data = []
+    
     r_info = {}
     resource_type_labels = []
     resource_count_data = []
     weeks = list(Resource.objects.values_list("scheduled_week", flat=True).distinct().order_by("scheduled_week"))
     
-    # user_modules = user.modules.all()
-    # user_resources = Resource.objects.filter(module__in = user_modules, scheduled_week = week)
-    # if not importance =='ALL':
-    #     user_resources = user_resources.filter(importance = importance)
+    # get all resources with filters applied
+    user_modules = user.modules.all()
+    filtered_resources = Resource.objects.filter(module__in = user_modules, scheduled_week = week)
+    if not importance =='ALL':
+        filtered_resources = filtered_resources.filter(importance = importance)
+        ur=ur.filter(importance = importance)
+    
+    # calculate progress before applying completion filter
+    progress = calculate_overall_progress(user, filtered_resources)
+    m_progress = module_progress_dictionary(user_modules, ur, filtered_resources)
+    
+    # apply completion filter
+    if completion_status == "incomplete":
+            filtered_resources = filtered_resources.exclude(id__in = ur)
         
-    # print (len(user_resources))
+    # calculate charts data
+    labels = [str(m) for m in user_modules]
+    
     for m in modules:
-        labels.append(str(m))
-        if not importance == "ALL":
-            resources = Resource.objects.filter(module=m).filter(scheduled_week=week).filter(importance = importance)
-        else:
-            resources = Resource.objects.filter(module=m).filter(scheduled_week=week) # REFACTOR Resource.objects.filter(module_in=modules).filter(scheduled_week=week) 
-            
-        ur=user.completed_resources.filter(module=m).filter(scheduled_week=week)
-        
-        if completion_status == "incomplete":
-            resources = resources.exclude(id__in = ur)
-            
-        if not importance =="ALL":
-            ur= ur.filter(importance=importance)
-            
-        if resources:
-            m_progress[m]=int(len(ur)/len(resources)*100) #.filter(importance = importance)
-        else:
-            m_progress[m]= 100
-        
+        resources = filtered_resources.filter(module = m)
         module_resources=resources.values("resource_type").annotate(total=Sum("recommended_time_in_minutes"))
-        filtered_resources+=resources.values_list("id", flat=True)
         ml = [ m["resource_type"] for m in module_resources]
         md = [m["total"] for m in module_resources]
         resource_type_labels.append(ml)
@@ -121,35 +151,18 @@ def overview(request):
     
     r_labels = list(r_info.keys())
     r_data = list(r_info.values())
-    
-    completed_selected_week = user.completed_resources.all().filter(id__in=filtered_resources)
-    progress = 100
-    if filtered_resources: 
-        progress = int((len(completed_selected_week)/len(filtered_resources))*100)
         
-    # print(progress)
-
-    # plan_form = PlanForm(week_plan = week)
-    # Plan form - week = week input
-    # if plan for week exists - send form to be edited
+    
     heaviest_module = labels[data.index(max(data))] + " ("+ minutes_to_hours_helper(max(data))+")"
     lightest_module = labels[data.index(min(data))] + " ("+ minutes_to_hours_helper(min(data))+")"
     total = minutes_to_hours_helper(sum(data))
     summary_data = {"Heaviest Module":  heaviest_module, "Total time estimated":total , "Lightest Module":lightest_module } #, "Mandatory Work": "[2.5hrs]"
     
-    user_current_week_plans = user.plans.filter(week_plan=week)
-    if user_current_week_plans:
-        plan_form = PlanForm(instance=user_current_week_plans[0])
-        plan = user_current_week_plans[0]
-    else:
-        plan = None
-        plan_form = PlanForm()
-
+    plan_form, plan = overview_plan_form(user, week)
     
     context = {"labels": labels, "data": data, "r_labels": json.dumps(r_labels), "r_data": json.dumps(r_data), "plan_form": plan_form, "plan" : plan, 
                 "plans":user.plans, 'selected_week': week, 'completion_status': completion_status, 'weeks': weeks, "progress": progress, "summary_data":summary_data, 
-                "importances":importances, "selected_importance":importance, "m_progress": m_progress, "time_total": round(sum(data),2)}
-
+                "importances": importances_list(), "selected_importance":importance, "m_progress": m_progress, "time_total": round(sum(data),2)}
         
     if request.method == 'POST':
         form = PlanForm(request.POST)
@@ -191,11 +204,6 @@ def module_page(request, module_code):
         # print(request.POST.getlist('checklist', None))
         if complete_r_ids:
             user.adjust_completed_resources(complete_r_ids, module)
-        
-    # relevant_completed = request.user.completed_resources.filter(module__in = module_resources)
-    # print(relevant_completed)
-    # user_completed_resources = [r for r in module_resources if r in request.user.completed_resources] 
-    
     return render(request, 'module_page.html', {'module': module, 'module_resources': module_resources, 
                                                 "resources_by_week": resources_by_week, "importances":importances }) 
     
