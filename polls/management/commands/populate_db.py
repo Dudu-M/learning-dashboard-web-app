@@ -37,7 +37,7 @@ class Command(BaseCommand):
         first_name = name
         last_name = surname
         email = self._email(first_name, last_name)
-        username = f'{first_name}.{last_name}'
+        username = username
         modules = Module.objects.order_by('?')[:4]
         user = User.objects.create_user(
             username,
@@ -53,7 +53,7 @@ class Command(BaseCommand):
         first_name = name
         last_name = surname
         email = self._email(first_name, last_name)
-        username = f'{first_name}.{last_name}'
+        username = username
         modules = Module.objects.order_by('?')[:4]
         user = User.objects.create_user(
             username,
@@ -177,11 +177,11 @@ class Command(BaseCommand):
         print(f'--- Reflections seeded successfully----')
         
         # seed test inactive users 
-        in_active_user = self._create_inactive_user(self, "Jack", "Doe")
+        in_active_user = self._create_inactive_user(self, "Jack", "Doe", "jack.doe")
         print(f'--- Test in_active User successfully----')
         
         # seed test active users 
-        active_user = self._create_active_user(self, "Peter", "Piper")
+        active_user = self._create_active_user(self, "Peter", "Piper", "peter.piper")
         active_user.add_plan(plan_1)
         active_user.add_plan(plan_1)
         active_user.save()
