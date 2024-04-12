@@ -73,10 +73,9 @@ And navigate to `http://127.0.0.1:8000/polls/`.
 ### Sign up
 The application is made with an existing student database in mind therefore sign up requires valid StudentIDs
 
-You can sign up with one of the following IDs, and provide your own password:
+You can sign up with the following ID, and provide your own password:
 ```
-1. JaneDoeID24
-2. JackDoeID24
+studentID : Jack.Doe
 ```
 Signing up shows you a new user view where no plans or reflects have been made but a the students is registered to modules.
 
@@ -84,10 +83,10 @@ Signing up shows you a new user view where no plans or reflects have been made b
 
 One student account has been set up to show the use of the system over time. 
 
-You can log in the following user credentials :
+You can log in with the following user credentials :
 ```
-1. JaneDoeID24
-2. JackDoeID24
+studentID : Peter.Piper
+password: Password123
 ```
 This account is setup to have been used for 3 of the 5 weeks of data provided and shows pre made plans and reflections. You can also see the notification system. 
 
@@ -97,7 +96,7 @@ This account is setup to have been used for 3 of the 5 weeks of data provided an
 * Workload Overview Plan - type out information and save a plan
 * Workload Overview Plan - edit information and save the plan
 * Module page - check items and see progress changes in Workload Overview
-* Plans - see old plans list
+* Plans - see old plans list and click on plans to view, edit or reflect on
 * Reflection - reflect on plan
 * Reflections - see old reflections list
 
