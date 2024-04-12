@@ -22,7 +22,7 @@ cd studytool
 #### Step 2 : Create virtual environment
 
 ```sh
-python -m venv venv
+python3 -m venv venv
 ```
 This will create a new directory named `venv` in your project directory, containing the virtual environment.
 
@@ -49,13 +49,15 @@ pip install -r requirements.txt
 Step 5 : Apply Migrations
 
 ```sh
-python manage.py migrate
+python3 manage.py makemigrations
+
+python3 manage.py migrate
 ```
 
 Step 6 : Populate database
 
 ```sh
-python manage.py populate_db
+python3 manage.py populate_db
 ```
 
 This will create the objects used to demonstrate this project
@@ -63,7 +65,7 @@ This will create the objects used to demonstrate this project
 Step 7 : Run the server
 
 ```sh
-(venv)$ python manage.py runserver
+python3 manage.py runserver
 ```
 And navigate to `http://127.0.0.1:8000/polls/`.
 
