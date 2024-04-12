@@ -25,12 +25,6 @@ class Command(BaseCommand):
         while user_count < Command.USER_COUNT:
             self._create_user()
             user_count += 1
-            # print(f'Seeding user {user_count}',  end='\r')
-            # try:
-            #     self._create_user()
-            # except (django.db.utils.IntegrityError):
-            #     continue
-            # user_count += 1
         print(f'---{user_count} Users seeded successfully----')
         
     def _create_inactive_user(self, name, surname, username):
@@ -139,6 +133,8 @@ class Command(BaseCommand):
             created_at = (timezone.now() - datetime.timedelta(days=21))
         )
         plan_1.save()
+        plan_1.created_at = timezone.now() - datetime.timedelta(days=21)
+        plan_1.save()
         
         plan_2 = Plan.objects.create(
             week_plan = weeks[1],
@@ -147,6 +143,8 @@ class Command(BaseCommand):
             created_at = (timezone.now() - datetime.timedelta(days=14)),
         )
         plan_2.save()
+        plan_2.created_at = timezone.now() - datetime.timedelta(days=14)
+        plan_2.save()
         
         plan_3 = Plan.objects.create(
             week_plan = weeks[2],
@@ -154,6 +152,8 @@ class Command(BaseCommand):
             study_method = "For my study plan this week, I'm going to experiment with time-blocking. By dividing my day into manageable chunks and assigning specific tasks to each block, I hope to boost my productivity and stay more organized. It feels empowering to take control of my schedule like this.",
             created_at = (timezone.now() - datetime.timedelta(days=8))
         )
+        plan_3.save()
+        plan_3.created_at = timezone.now() - datetime.timedelta(days=8)
         plan_3.save()
         
         print(f'--- Plans seeded successfully----')
@@ -166,28 +166,33 @@ class Command(BaseCommand):
             created_at = (plan_1.created_at + datetime.timedelta(days=7)),
         )
         reflection_1.save()
+        reflection_1.created_at = plan_1.created_at + datetime.timedelta(days=7)
+        reflection_1.save()
         
         reflection_2 = Reflection.objects.create(
             plan_reflection = plan_2,
             time_reflection = "Time-blocking initially felt rigid, but breaking tasks into smaller chunks helped manage overwhelming workload. I also enjoyed the sense of accomplishment after completing each block",
             study_method_reflection = "Extending Pomodoro sessions allowed for deeper focus, but longer breaks felt disruptive. Shortening to 3-minute breaks maintained momentum without sacrificing rest.",
             carry_forward_reflection = "Breaking tasks into smaller pieces makes them more manageable",
-            created_at = (plan_1.created_at + datetime.timedelta(days=7)),
+            created_at = (plan_2.created_at + datetime.timedelta(days=7)),
         )
+        reflection_2.save()
+        reflection_1.created_at = plan_1.created_at + datetime.timedelta(days=7)
         reflection_2.save()
         
         print(f'--- Reflections seeded successfully----')
         
         # seed test inactive users 
         in_active_user = self._create_inactive_user("Jack", "Doe", "jack.doe")
-        print(f'--- Test in_active User successfully----')
+        print(f'--- Test in_active User seeded  successfully----')
         
         # seed test active users 
         active_user = self._create_active_user("Peter", "Piper", "peter.piper")
         active_user.add_plan(plan_1)
-        active_user.add_plan(plan_1)
+        active_user.add_plan(plan_2)
+        active_user.add_plan(plan_3)
         active_user.save()
-        print(f'--- Test active User successfully----')
+        print(f'--- Test active User seeded successfully----')
         
         
         
