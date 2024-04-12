@@ -15,9 +15,9 @@ class Command(BaseCommand):
         self.faker = Faker('en_GB')
 
     def handle(self, *args, **options):
-        # self.seed_modules()
-        # self.seed_resources()
-        # self.seed_users()
+        self.seed_modules()
+        self.seed_resources()
+        self.seed_users()
         self.seed_test_data()
 
     def seed_users(self):
@@ -182,7 +182,7 @@ class Command(BaseCommand):
         
         # seed test active users 
         active_user = self._create_active_user(self, "Peter", "Piper")
-        active_user.plans.add_plan(plan_1)
+        active_user.add_plan(plan_1)
         active_user.add_plan(plan_1)
         active_user.save()
         print(f'--- Test active User successfully----')

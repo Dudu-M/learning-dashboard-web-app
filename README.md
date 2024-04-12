@@ -16,13 +16,13 @@
 #### Step 1 : Navigate to the project directory
 
 ```sh
-$ cd mysite
+cd studytool
 ```
 
 #### Step 2 : Create virtual environment
 
 ```sh
-$ python3 -m venv venv
+python -m venv venv
 ```
 This will create a new directory named `venv` in your project directory, containing the virtual environment.
 
@@ -31,32 +31,31 @@ This will create a new directory named `venv` in your project directory, contain
 On Windows run:
 
 ```sh
-$ venv\Scripts\activate
+venv\Scripts\activate
 ```
 On MacOS/Linux run:
 
 ```sh
-$ source venv/bin/activate
+source venv/bin/activate
 ```
 You should see `(venv)` appear at the beginning of your command prompt, indicating that the virtual environment is active.
 
 Step 4 : Install Project dependencies
 
 ```sh
-(venv)$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-Step 5 : Apply Migrations and Populate database
+Step 5 : Apply Migrations
 
 ```sh
-(venv)$ python3 manage.py makemigrations
-(venv)$ python3 manage.py migrate
+python manage.py migrate
 ```
 
 Step 6 : Populate database
 
 ```sh
-(venv)$ python3 manage.py populate_db
+python manage.py populate_db
 ```
 
 This will create the objects used to demonstrate this project
@@ -64,7 +63,7 @@ This will create the objects used to demonstrate this project
 Step 7 : Run the server
 
 ```sh
-(venv)$ python3 manage.py runserver
+(venv)$ python manage.py runserver
 ```
 And navigate to `http://127.0.0.1:8000/polls/`.
 
