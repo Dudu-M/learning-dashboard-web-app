@@ -72,7 +72,7 @@ class Plan(models.Model):
         return days
     
     def get_reflection_date(self):
-        target_date = (self.created_at + datetime.timedelta(days=1)).date()
+        target_date = (self.created_at + datetime.timedelta(days=7)).date()
         return target_date
     
     def reflection_overdue(self):

@@ -44,7 +44,7 @@
         {%if current_plan %}
         <div class="card-header">
             <h5>
-                Your {{current_plan.week_plan}} Study Plan  
+                <a href="{% url 'show_plan' current_plan.id %}" style="text-decoration:none; color: black"> Your {{current_plan.week_plan}} Study Plan</a>  
                 <a class="btn btn-dark btn-sm" href="{% url 'plan_edit' current_plan.id %}" role="button">Edit</a>
                 {%if current_plan.reflection_overdue%}
                     <a class="btn btn-danger btn-sm" href="{% url 'reflection' current_plan.id %}" role="button">Reflect</a>
