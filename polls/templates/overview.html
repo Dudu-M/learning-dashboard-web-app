@@ -1,6 +1,7 @@
 {% extends 'base_content.html' %}
 {% block content %}
 <div class="container" style="padding-top: 4%; width: 200%">
+{%if request.user.modules.all.exists%}
     <div class="d-flex justify-content-between">
         <div class="d-flex">
         <h3 style="padding-right:40px">Workload Overview</h3> 
@@ -124,6 +125,12 @@
     </div>
 </div>
 <div style="font-size: 12px; text-align: center; color: grey;"><i>scroll horizontally to see more</i></div>
+{%else%}
+<h3 style="padding-right:40px">Workload Overview</h3> 
+You need to be enrolled into modules to see data on this dashboard
+<div style="padding:10px">contact a staff member to get help<div>
+{{request.user.modules.all}}
+{%endif%}
 </div>
 <script>
     const ctx = document.getElementById('myChart');
