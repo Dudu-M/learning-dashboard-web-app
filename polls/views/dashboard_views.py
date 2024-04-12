@@ -121,16 +121,17 @@ def overview(request):
     total = minutes_to_hours_helper(sum(data))
     summary_data = {"Heaviest Module":  heaviest_module, "Total time estimated":total , "Lightest Module":lightest_module } #, "Mandatory Work": "[2.5hrs]"
     
-    plan_form, plan = overview_plan_form(user, week)
+    overview_form, plan = overview_plan_form(user, week)
     
-    context = {"labels": labels, "data": data, "r_labels": json.dumps(r_labels), "r_data": json.dumps(r_data), "plan_form": plan_form, "plan" : plan, 
+    context = {"labels": labels, "data": data, "r_labels": json.dumps(r_labels), "r_data": json.dumps(r_data), "plan_form": overview_form, "plan" : plan, 
                 "plans":user.plans, 'selected_week': week, 'completion_status': completion_status, 'weeks': weeks, "progress": progress, "summary_data":summary_data, 
                 "importances": importances_list(), "selected_importance":importance, "m_progress": m_progress, "time_total": round(sum(data),2)}
         
     if request.method == 'POST':
         form = PlanForm(request.POST)
+        print(not plan)
         if form.is_valid():
-            if plan :
+            if not plan:
                 # edit the existing plan
                 plan.week_plan = form.cleaned_data.get('week_plan')
                 plan.time_plan = form.cleaned_data.get('time_plan')
@@ -217,4 +218,3 @@ def minutes_to_hours_helper(minutes):
         return str(t[0])+"hrs"
     else:
         return str(t[0])+"hrs " + str(t[1])+"mins"
-    
