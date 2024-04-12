@@ -76,9 +76,9 @@ The application is made with an existing student database in mind therefore sign
 
 You can sign up with the following ID, and provide your own password:
 ```
-studentID : Jack.Doe
+studentID : jack.doe
 ```
-Signing up shows you a new user view where no plans or reflects have been made but a the students is registered to modules.
+Signing up shows you a new user view where no plans or reflections have been made but the students is registered to modules and can use the Learning Analytics DAshboard.
 
 ### Login
 
@@ -86,10 +86,17 @@ One student account has been set up to show the use of the system over time.
 
 You can log in with the following user credentials :
 ```
-studentID : Peter.Piper
+studentID : peter.piper
 password: Password123
 ```
 This account is setup to have been used for 3 of the 5 weeks of data provided and shows pre made plans and reflections. You can also see the notification system. 
+
+You can create a super user using the command :
+```
+python3 manage.py createsuperuser
+```
+
+Follow the instructions and then you can login to the admin site `http://127.0.0.1:8000/admin/` to see the database tables
 
 ### Functionality you can test
 

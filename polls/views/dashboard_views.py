@@ -138,7 +138,7 @@ def overview(request):
                 plan.save()
             else:
                 saved_form = form.save()
-                user.add_plan(saved_form[0])
+                user.add_plan(saved_form)
             messages.add_message(request, messages.SUCCESS, "Plan saved!")
             return redirect(settings.REDIRECT_URL_WHEN_LOGGED_IN)
         else:

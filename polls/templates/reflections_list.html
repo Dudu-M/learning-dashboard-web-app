@@ -2,9 +2,7 @@
 {% block content %}
 <div class="container" style="padding-top: 5%;">
     <h3>Past Reflections</h3> 
-    {% comment %} <div class="card-header">
-        <i class="fa-solid fa-star"></i> Key Takeaways
-    </div> {% endcomment %}
+    {%if reflections%}
     {%for r in reflections%}
         <div class="card border-success mb-3">
             <div class="card-header">
@@ -20,6 +18,10 @@
             </a>
         </div>
     {%endfor%}
+    {%else%}
+    The reflections you make will appear here...
+    <div style="padding:10px">Check out your <a href="{% url 'plans_list' %}">Plans</a> to start reflecting<div>
+    {%endif%}
 </div>
 {% endblock %}
 

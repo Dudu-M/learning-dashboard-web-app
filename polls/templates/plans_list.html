@@ -7,6 +7,7 @@
             <i class="fa-solid fa-sm fa-pen-to-square"></i>
         </a></h3>
     </div>
+    {% if plans.exist%}
     <div class="row">
         <div class="col-6">
             <div class="card">
@@ -24,17 +25,24 @@
         <div class="col-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Due for reflection <span class="badge translate-middle badge rounded-pill bg-danger">{{overdue}}</span></h5>
+                    <h5>Due for reflection {%if overdue > 0%}  <span class="badge translate-middle badge rounded-pill bg-danger">{{overdue}} {%endif%}</span></h5>
                 </div>
                 <ul class="list-group list-group-flush" style="auto-overflow-y: scroll; height:50%;">
                     {% for  p in plans %}
                         <a href="{% url 'show_plan' p.id %}" style="text-decoration:none"> 
                             {% if p.reflection_overdue %}
-                            <li class="list-group-item">
+                            <li class="list-group-item list-group-item-danger">
                                 {{p.week_plan}} {{ p.study_method |truncatechars:30 }}
                                 <small class="text-muted" style="float:right;"> <i class="fa-solid fa-r fa-sm" style="padding-right:3px; color:red;"> <i class="fa-solid fa-spinner"></i></i>was due {{p.get_reflection_date | timesince}} ago </small>
-                                {%endif%}
                             </li>
+                            {%else%}
+                                {% if not p.has_reflection %}
+                                <li class="list-group-item">
+                                    {{p.week_plan}} {{ p.study_method |truncatechars:30 }}
+                                    <small class="text-muted" style="float:right;"> <i class="fa-solid fa-r fa-sm" style="padding-right:3px; color:red;"> <i class="fa-solid fa-spinner"></i></i>due in {{p.get_reflection_date | timeuntil}} ago </small>
+                                </li>
+                                {%endif%}
+                            {%endif%}
                         </a>
                     {% endfor %}
                 </ul>
@@ -60,6 +68,10 @@
             <br>
         </div>
     </div>
+{%else%}
+The plans you make will appear here
+<div style="padding:10px">Check out the <a href="{% url 'overview' %}">WorkLoadOverview Dashboard</a> to get going!<div>
+{%endif%}
 </div>
 {% endblock %}
 

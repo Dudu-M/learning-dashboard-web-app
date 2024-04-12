@@ -90,7 +90,7 @@ class Command(BaseCommand):
         return username
 
     def seed_modules(self):
-        modules = [("6CCSIC", "Intro to Computing"), ("6CCSIA", "Intro to AI"), ("6CCSIR", "Intro to Robotics"), ("6CCSIML", "Intro to Machine Learning")]
+        modules = [("6CCSIC", "Intro to Computing"), ("6CCSIA", "Intro to AI"), ("6CCSIR", "Intro to Robotics"), ("6CCSIML", "Machine Learning101")]
         for m in modules:
             module = Module.objects.create(module_code=m[0], module_name=m[1])
             module.save()
@@ -177,11 +177,11 @@ class Command(BaseCommand):
         print(f'--- Reflections seeded successfully----')
         
         # seed test inactive users 
-        in_active_user = self._create_inactive_user(self, "Jack", "Doe", "jack.doe")
+        in_active_user = self._create_inactive_user("Jack", "Doe", "jack.doe")
         print(f'--- Test in_active User successfully----')
         
         # seed test active users 
-        active_user = self._create_active_user(self, "Peter", "Piper", "peter.piper")
+        active_user = self._create_active_user("Peter", "Piper", "peter.piper")
         active_user.add_plan(plan_1)
         active_user.add_plan(plan_1)
         active_user.save()
