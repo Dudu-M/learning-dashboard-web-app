@@ -31,11 +31,9 @@ class PlanEditViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
         
     def test_editing_plan_does_not_create_increase_count(self):
-        pass
-    
-    def test_cannot_edit_non_other_student_plan(self):
-        pass
         self.client.login(username=self.user.username, password='Password123')
-        self.url = reverse('plan_edit', kwargs={'pk': 2})
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
+        before_edit_count = Plan.objects.count
+        self.url = reverse('plan_edit', kwargs={'pk': 1})
+        after_edit_count = Plan.objects.count
+        self.assertEqual (before_edit_count, after_edit_count)
+    

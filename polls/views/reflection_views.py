@@ -38,7 +38,8 @@ class ReflectionEditView(LoginRequiredMixin, UpdateView):
     fields = ["time_reflection", "study_method_reflection", "carry_forward_reflection"]
     
     def dispatch(self, request, *args, **kwargs):
-        if self.get_object().plan_reflection not in request.user.plans.all():
+        user = request.user
+        if user.is_active and (self.get_object().plan_reflection not in request.user.plans.all()):
             messages.add_message(self.request, messages.ERROR, "Not a valid Reflection to edit")
             return redirect(reverse('plans_list'))
         return super().dispatch(request, *args, **kwargs)
@@ -59,7 +60,8 @@ class ReflectionDeleteView(LoginRequiredMixin, DeleteView):
 
     def dispatch(self, request, *args, **kwargs):
         # safety checks is user allowed to delete?
-        if self.get_object().plan_reflection not in request.user.plans.all():
+        user = request.user
+        if user.is_active and (self.get_object().plan_reflection not in request.user.plans.all()):
             messages.add_message(self.request, messages.ERROR, "Not a valid Reflection to delete")
             return HttpResponseForbidden()
         else:

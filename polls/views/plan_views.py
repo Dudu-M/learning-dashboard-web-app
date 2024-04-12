@@ -59,7 +59,8 @@ class PlanEditView(LoginRequiredMixin, UpdateView):
         return form
     
     def dispatch(self, request, *args, **kwargs):
-        if self.get_object() not in request.user.plans.all():
+        user = request.user
+        if user.is_active and (self.get_object() not in request.user.plans.all()):
             messages.add_message(self.request, messages.ERROR, "Not a valid Plan to edit")
             return redirect(reverse('plans_list'))
         return super().dispatch(request, *args, **kwargs)
@@ -75,7 +76,8 @@ class PlanDeleteView(LoginRequiredMixin, DeleteView):
 
     def dispatch(self, request, *args, **kwargs):
         # safety checks is user allowed to delete?
-        if self.get_object() not in request.user.plans.all():
+        user = request.user
+        if user.is_active and (self.get_object() not in request.user.plans.all()):
             messages.add_message(self.request, messages.ERROR, "Not a valid Plan to delete")
             return HttpResponseForbidden()
         else:
