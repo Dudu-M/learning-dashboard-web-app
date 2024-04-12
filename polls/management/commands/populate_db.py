@@ -65,6 +65,8 @@ class Command(BaseCommand):
         for m in modules:
             user.modules.add(m)
             
+        return user
+            
     def _create_user(self):
         first_name = self.faker.first_name()
         last_name = self.faker.last_name()
