@@ -80,7 +80,7 @@ You can sign up with the following ID, and provide your own password:
 ```
 studentID : jack.doe
 ```
-Signing up shows you a new user view where no plans or reflections have been made but the students is registered to modules and can use the Learning Analytics DAshboard.
+Signing up shows you a new user view where no plans or reflections have been made but the student is registered to modules and can use the Learning Analytics Dashboard.
 
 ### Login
 
