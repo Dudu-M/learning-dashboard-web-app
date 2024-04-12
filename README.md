@@ -13,20 +13,20 @@
 
     If you do not have pip installed, you can download and install it from this page: https://pypi.org/project/pip/
 
-#### Step 1 : Navigate to the project directory
+### Step 1 : Navigate to the project directory
 
 ```sh
 cd studytool
 ```
 
-#### Step 2 : Create virtual environment
+### Step 2 : Create virtual environment
 
 ```sh
 python3 -m venv venv
 ```
 This will create a new directory named `venv` in your project directory, containing the virtual environment.
 
-#### Step 3 : Activate  virtual environment
+### Step 3 : Activate  virtual environment
 
 On Windows run:
 
@@ -40,13 +40,13 @@ source venv/bin/activate
 ```
 You should see `(venv)` appear at the beginning of your command prompt, indicating that the virtual environment is active.
 
-Step 4 : Install Project dependencies
+### Step 4 : Install Project dependencies
 
 ```sh
 pip install -r requirements.txt
 ```
 
-Step 5 : Apply Migrations
+### Step 5 : Apply Migrations
 
 ```sh
 python3 manage.py makemigrations
@@ -54,7 +54,7 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 ```
 
-Step 6 : Populate database
+### Step 6 : Populate database
 
 ```sh
 python3 manage.py populate_db
@@ -62,7 +62,7 @@ python3 manage.py populate_db
 
 This will create the objects used to demonstrate this project
 
-Step 7 : Run the server
+### Step 7 : Run the server
 
 ```sh
 python3 manage.py runserver
