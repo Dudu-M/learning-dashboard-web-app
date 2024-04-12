@@ -183,11 +183,11 @@ class Command(BaseCommand):
         print(f'--- Reflections seeded successfully----')
         
         # seed test inactive users 
-        in_active_user = self._create_inactive_user("Jack", "Doe", "jack.doe")
+        in_active_user = self._create_inactive_user("Jamie", "Doe", "jamie.doe")
         print(f'--- Test in_active User seeded  successfully----')
         
         # seed test active users 
-        active_user = self._create_active_user("Peter", "Piper", "peter.piper")
+        active_user = self._create_active_user("Sam", "Piper", "sam.piper")
         active_user.add_plan(plan_1)
         active_user.add_plan(plan_2)
         active_user.add_plan(plan_3)

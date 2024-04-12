@@ -78,7 +78,7 @@ The application is made with an existing student database in mind therefore sign
 
 You can sign up with the following ID, and provide your own password:
 ```
-studentID : jack.doe
+studentID : jamie.doe
 ```
 Signing up shows you a new user view where no plans or reflections have been made but the student is registered to modules and can use the Learning Analytics Dashboard.
 
@@ -88,7 +88,7 @@ One student account has been set up to show the use of the system over time.
 
 You can log in with the following user credentials :
 ```
-studentID : peter.piper
+studentID : sam.piper
 password: Password123
 ```
 This account is setup to have been used for 3 of the 5 weeks of data provided and shows pre made plans and reflections. You can also see the notification system. 
