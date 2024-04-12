@@ -1,5 +1,7 @@
 # SRL Buddy Django Web Application
 
+SRL Buddy is a learning management system with a Learning Analytics Dashbored(LAD) and fetaures to help students manage their learning online. It incoporates features that help students improve self-regulated learning(SRL) such as data visualisations, planning prompts, and reflections, which help them engage their strategic-planning, time management and self-management skills.
+
 ## Setup
 #### Prerequisites
 
@@ -91,14 +93,21 @@ password: Password123
 ```
 This account is setup to have been used for 3 of the 5 weeks of data provided and shows pre made plans and reflections. You can also see the notification system. 
 
+**Admin Account**
+
 You can create a super user using the command :
 ```
 python3 manage.py createsuperuser
 ```
 
-Follow the instructions and then you can login to the admin site `http://127.0.0.1:8000/admin/` to see the database tables
+This will prompt you to add a username, email and password, and then you can login to the admin site `http://127.0.0.1:8000/admin/`.
+Here you will be able to see database tables.
 
 ### Functionality you can test
+
+There are a number of ways you can canigate the system and a good place to start can be the 'Workload Overview' page. From there you will be able to see what features exist and you can navigate through to creating and editing plans and reflections.
+
+Here are some features you can start with:
 
 * Workload Overview - apply filters and interact with the charts
 * Workload Overview Plan - type out information and save a plan
