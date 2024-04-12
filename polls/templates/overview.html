@@ -52,12 +52,21 @@
                     </div>
                 </div>
                 </div>
-                <form method="post">
-                    {% csrf_token %}
-                    {% include 'partials/bootstrap_form.html' with form=plan_form %}
-                    <input type="submit" value="Save" class="btn btn-primary">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Close</button>
-                </form>
+                {% if plan %}
+                    <form action="{% url 'plan_edit' plan.id %}" method="post">
+                            {% csrf_token %}
+                            {% include 'partials/bootstrap_form.html' with form=plan_form %}
+                            <input type="submit" value="Save" class="btn btn-primary">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Close</button>
+                    </form>
+                {% else %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {% include 'partials/bootstrap_form.html' with form=plan_form %}
+                        <input type="submit" value="Save" class="btn btn-primary">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Close</button>
+                    </form>
+                {%endif%}
             </div>
         </div>
     </div>

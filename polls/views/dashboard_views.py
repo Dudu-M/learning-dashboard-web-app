@@ -126,21 +126,13 @@ def overview(request):
     context = {"labels": labels, "data": data, "r_labels": json.dumps(r_labels), "r_data": json.dumps(r_data), "plan_form": overview_form, "plan" : plan, 
                 "plans":user.plans, 'selected_week': week, 'completion_status': completion_status, 'weeks': weeks, "progress": progress, "summary_data":summary_data, 
                 "importances": importances_list(), "selected_importance":importance, "m_progress": m_progress, "time_total": round(sum(data),2)}
-        
+    
     if request.method == 'POST':
         form = PlanForm(request.POST)
-        print(not plan)
         if form.is_valid():
-            if not plan:
-                # edit the existing plan
-                plan.week_plan = form.cleaned_data.get('week_plan')
-                plan.time_plan = form.cleaned_data.get('time_plan')
-                plan.study_method = form.cleaned_data.get('study_method')
-                plan.save()
-            else:
-                saved_form = form.save()
-                user.add_plan(saved_form)
-            messages.add_message(request, messages.SUCCESS, "Plan saved!")
+            saved_form = form.save()
+            user.add_plan(saved_form)  
+            messages.add_message(request, messages.SUCCESS, "Plan Created!")
             return redirect(settings.REDIRECT_URL_WHEN_LOGGED_IN)
         else:
             messages.add_message(request, messages.ERROR, "Error: Form invalid!")

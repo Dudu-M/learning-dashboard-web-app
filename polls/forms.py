@@ -104,6 +104,7 @@ class PlanForm(forms.ModelForm):
             time_plan = self.cleaned_data.get('time_plan'),
             study_method = self.cleaned_data.get('study_method'),
         )
+        plan.save()
         return plan
     
 class ReflectionForm(forms.ModelForm):
